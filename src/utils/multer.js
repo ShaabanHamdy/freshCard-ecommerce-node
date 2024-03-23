@@ -16,9 +16,9 @@ export const myMulter = () => {
     const __dirName = path.dirname(fileURLToPath(import.meta.url))
     const fullPath = path.join(__dirName, `../uploads/images`)
     // console.log(fullPath);
-    if (fs.existsSync(fullPath)) {
-        fs.mkdirSync(fullPath, { recursive: true })
-    }
+    // if (fs.existsSync(fullPath)) {
+    //     fs.mkdirSync(fullPath, { recursive: true })
+    // }
     const storage = SharpMulter({
         destination: (req, file, callback) => {
             callback(null, "uploads")
