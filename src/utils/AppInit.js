@@ -9,6 +9,7 @@ const __dirName = path.dirname(fileURLToPath(import.meta.url))
 
 
 
+
 const AppInit = (app, express) => {
     app.use(express.json({}))
     app.use(cors())

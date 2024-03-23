@@ -13,7 +13,7 @@ export const createProduct = async (req, res, next) => {
 
         console.log(req.files);
     const products = await productModel.create({
-        mainImage: req.files.mainImage.map((e) => e.path),
+        mainImage: req.files.mainImage.map((e) =>"https://fresh-card-ecommerce-node.vercel.app/" + e.path),
         subImages: req.files.subImages.map((e) => e.path),
         // mainImage: req.files.mainImage.map((e) => e.path.slice(69).replace(/\\/g, "/")),
         // subImages: req.files.subImages.map((e) => e.path.slice(69).replace(/\\/g, "/")),
