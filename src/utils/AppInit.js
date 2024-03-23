@@ -17,9 +17,9 @@ const AppInit = (app, express) => {
     app.use("/uploads/images", express.static(path.join(__dirName, "../uploads/images")))
     app.use("/user", appRouters.userRouter)
     app.use("/product", appRouters.productRouter)
-    // app.use("/cart", appRouters.cartRouter)
-    // app.use("/order", appRouters.orderRouter)
-    // app.use("/category", appRouters.categoryRouter)
+    app.use("/cart", appRouters.cartRouter)
+    app.use("/order", appRouters.orderRouter)
+    app.use("/category", appRouters.categoryRouter)
     app.get('/', (req, res) => res.send('Welcome to our World '))
     //============================================================ routing
     app.use(globalErrorHandling)
