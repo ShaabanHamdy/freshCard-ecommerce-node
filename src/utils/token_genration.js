@@ -6,7 +6,8 @@ import jwt from "jsonwebtoken"
 
 export const token_generation = ({
     payload = {},
-    signature = process.env.SIGNATURE,
+    signature = "GENERATETOKEN",
+    // signature = process.env.SIGNATURE,
     
 }) => {
 
@@ -17,7 +18,8 @@ export const token_generation = ({
 // =========================================================================
 export const token_decode = ({
     payload = {},
-    signature = process.env.SIGNATURE,
+    signature = "GENERATETOKEN",
+    // signature = process.env.SIGNATURE,
 }) => {
 
     const decode = jwt.verify(payload, signature)

@@ -16,6 +16,7 @@ export const signUp = async (req, res, next) => {
 //=====================================================  login
 
 
+
 export const login = async (req, res, next) => {
     const checkEmail = await userModel.findOne({ email: req.body.email })
     if (!checkEmail) return next(new Error("invalid email information"))
