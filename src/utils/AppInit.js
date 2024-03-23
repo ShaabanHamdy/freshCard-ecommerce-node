@@ -1,8 +1,9 @@
-import ConnectionDB from "../../DB/ConnectionDB.js"
+
 // import * as appRouters from "../modules/app.routes.js"
 import cors from 'cors'
 import path from "path";
 import { fileURLToPath } from "url";
+import ConnectionDB from '../../DB/ConnectionDB.js';
 const __dirName = path.dirname(fileURLToPath(import.meta.url))
 // import  globalErrorHandling  from './error.handling.js';
 
