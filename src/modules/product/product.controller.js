@@ -12,8 +12,8 @@ export const createProduct = async (req, res, next) => {
     if (await productModel.findOne({ title: req.body.title })) return next(new Error("duplicated name"))
 
     const products = await productModel.create({
-        mainImage: req.files.mainImage.map((e) => e.path.slice(64).replace(/\\/g, "/")),
-        subImages: req.files.subImages.map((e) => e.path.slice(64).replace(/\\/g, "/")),
+        mainImage: req.files.mainImage.map((e) => e.path.slice(69).replace(/\\/g, "/")),
+        subImages: req.files.subImages.map((e) => e.path.slice(69).replace(/\\/g, "/")),
         title: req.body.title,
         categoryName: req.body.categoryName,
         description: req.body.description,
@@ -39,6 +39,11 @@ export const deleteAllProducts = async (req, res, next) => {
     if (product.deletedCount < 1) return next(new Error("not find andy products ", { cause: 409 }))
     res.status(201).json({ message: "success", deletedCount: product.deletedCount })
 }
+export const deleteOneProducts = async (req, res, next) => {
+    const product = await productModel.deleteOne({_id:req.body.id})
+    if (product.deletedCount < 1) return next(new Error("not find andy products ", { cause: 409 }))
+    res.status(201).json({ message: "success", deletedCount: product.deletedCount })
+}
 
 
 // =========================================================
@@ -48,7 +53,7 @@ export const getAllProducts = async (req, res, next) => {
     const data = await productModel.find().populate([{
         path: "categoryId"
     }])
-    .limit(limit).skip(skip)
+    // .limit(limit).skip(skip)
     if (data.length == 0) {
         next(new Error("no products available"))
     }
