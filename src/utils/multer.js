@@ -14,7 +14,8 @@ const validationObject = {
 }
 export const myMulter = () => {
     const __dirName = path.dirname(fileURLToPath(import.meta.url))
-    const fullPath = path.join(__dirName, `../uploads/images`)
+    const fullPath = path.join(__dirName, `../../uploads/images`)
+    console.log(fullPath);
     if (fs.existsSync(fullPath)) {
         fs.mkdirSync(fullPath, { recursive: true })
     }
