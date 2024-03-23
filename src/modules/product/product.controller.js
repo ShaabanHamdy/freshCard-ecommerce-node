@@ -11,12 +11,9 @@ export const createProduct = async (req, res, next) => {
 
     if (await productModel.findOne({ title: req.body.title })) return next(new Error("duplicated name"))
 
-    
     const products = await productModel.create({
-        mainImage: req.files.mainImage.map((e) => e.path.slice(65).replace(/\\/g, "/")),
-        subImages: req.files.subImages.map((e) => e.path.slice(65).replace(/\\/g, "/")),
-        // mainImage: req.files.mainImage.map((e) => e.path.slice(69).replace(/\\/g, "/")),
-        // subImages: req.files.subImages.map((e) => e.path.slice(69).replace(/\\/g, "/")),
+        mainImage: req.files.mainImage.map((e) => e.path.slice(69).replace(/\\/g, "/")),
+        subImages: req.files.subImages.map((e) => e.path.slice(69).replace(/\\/g, "/")),
         title: req.body.title,
         categoryName: req.body.categoryName,
         description: req.body.description,
