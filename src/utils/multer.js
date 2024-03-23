@@ -1,10 +1,9 @@
 import multer, { memoryStorage } from "multer";
-// import SharpMulter from "sharp-multer";
+import SharpMulter from "sharp-multer";
 import path from "path";
 import { fileURLToPath } from "url";
 import fs from 'fs'
 import { nanoid } from "nanoid";
-
 
 
 
@@ -17,24 +16,21 @@ export const myMulter = () => {
     const __dirName = path.dirname(fileURLToPath(import.meta.url))
     const fullPath = path.join(__dirName, `../uploads/images`)
     if (!fs.existsSync(fullPath)) {
-        // fs.mkdirSync(fullPath, { recursive: true })
-        fs.promises.mkdir(fullPath, { recursive: true })
+        fs.mkdirSync(fullPath, { recursive: true })
     }
-    
-    
-    // const storage = SharpMulter({
-    //     destination: (req, file, callback) => {
-    //         callback(null, fullPath)
-    //     },
-    //     filename: (req, file, cb) => {
-    //         return `${nanoid(4)}--` + req
-    //     },
-    //     imageOptions: {
-    //         quality: 80,
-    //         resize: { width: 660, height: 900 },
-    //     },
+    const storage = SharpMulter({
+        destination: (req, file, callback) => {
+            callback(null, fullPath)
+        },
+        filename: (req, file, cb) => {
+            return `${nanoid(4)}--` + req
+        },
+        imageOptions: {
+            quality: 80,
+            resize: { width: 660, height: 900 },
+        },
         
-    // });
+    });
     
     const fileFilter = (req, file, cb) => {
         if (validationObject.image.includes(file.mimetype)) {
@@ -44,8 +40,8 @@ export const myMulter = () => {
     }
     
     //==============================================================================
-    // const upload = multer({ fileFilter, storage })
-    const upload = multer({ fileFilter })
+    const upload = multer({ fileFilter, storage })
+    // const upload = multer({ fileFilter })
     return upload
 }
 
