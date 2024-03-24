@@ -67,7 +67,7 @@ export const createOrder = async (req, res, next) => {
         metadata: {
             orderIde: order._id.toString()
         },
-        cancel_url: `${process.env.CANCEL_URL}?orderIds=${order._id.toString()}`,
+        cancel_url: `http://localhost:3000/Cart?orderIds=${order._id.toString()}`,
         line_items: order.products.map(product => {
             return {
                 price_data: {
