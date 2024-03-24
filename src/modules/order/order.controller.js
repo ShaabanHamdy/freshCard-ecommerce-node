@@ -6,9 +6,9 @@ import { Stripe } from 'stripe';
 
 export const createOrder = async (req, res, next) => {
     const { note, address, phone } = req.body
-    console.log(note,address,phone);
+    console.log(note, address, phone);
 
-    
+
     // const cart = await cartModel.findOne({ userId: req.user._id })
     // if (!cart?.products?.length) {
     //     return next(new Error(`Empty cart`))
@@ -85,9 +85,13 @@ export const createOrder = async (req, res, next) => {
 
 
     // return res.status(201).json({ message: "Done", order, session, url: session.url })
-    return res.status(201).json({ message: "Done"})
+    return res.status(201).json({ message: "Done" })
 
 
 }
 
 
+export const getAll = async (req, res, next) => {
+    const order = await productModel.find()
+    res.json({ message: "Done" })
+}

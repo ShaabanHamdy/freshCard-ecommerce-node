@@ -7,6 +7,8 @@ const router = Router()
 
 
 // ========================================================================
-router.post("/order",auth(),asyncHandling(orderConnection.createOrder))
+router.post("/createOrder",auth(),asyncHandling(orderConnection.createOrder))
+
+router.get("/getAll",asyncHandling(orderConnection.getAll))
 
 export default router
