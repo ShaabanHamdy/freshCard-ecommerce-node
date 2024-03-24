@@ -14,8 +14,9 @@ import globalErrorHandling from "./error_handling.js";
 const AppInit = (app, express) => {
     // app.use(express.json({}))
     app.use((req,res,next)=>{
+        console.log(req.originalUrl);
         if (req.originalUrl == "/order/webhook") {
-            next()
+          return  next()
         }else{
             express.json({})(req,res,next)
         }
