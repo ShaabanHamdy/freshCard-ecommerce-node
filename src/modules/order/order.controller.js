@@ -45,18 +45,18 @@ export const createOrder = async (req, res, next) => {
         products: finalProductList,
         subtotal,
         paymentType,
-        status: "waitPayment" 
+        status: "waitPayment"
     })
 
-    // decrease product from stock
-    for (const product of req.body.products) {
-        await productModel.updateOne({ _id: product.productId }, { $inc: { stock: -product.quantity, sold: product.quantity } })
-    }
+    // // decrease product from stock
+    // for (const product of req.body.products) {
+    //     await productModel.updateOne({ _id: product.productId }, { $inc: { stock: -product.quantity, sold: product.quantity } })
+    // }
 
-    // clear cart items
+    // // clear cart items
 
-    await cartModel.updateOne({ userId: req.user._id }, { products: [] })
-    payment 
+    // await cartModel.updateOne({ userId: req.user._id }, { products: [] })
+    // payment
     const stripe = new Stripe(process.env.STRIP_KEY)
     const session = await payment({
         stripe,
@@ -76,7 +76,7 @@ export const createOrder = async (req, res, next) => {
                     },
                     unit_amount: product.price * 100
                 },
-                quantity: product.quantity 
+                quantity: product.quantity
             }
         })
 
@@ -94,3 +94,39 @@ export const getAll = async (req, res, next) => {
     const order = await productModel.find()
     res.json({ message: "Done" })
 }
+
+
+export const webhook = async (req, res) => {
+    const stripe = Stripe(process.env.STRIP_KEY)
+    const sig = req.headers['stripe-signature'];
+
+    let event;
+
+    try {
+        event = stripe.webhooks.constructEvent(req.body, sig, process.env.endpointSecret);
+    } catch (err) {
+        res.status(400).send(`Webhook Error: ${err.message}`);
+        return;
+    }
+
+    // Handle the event
+    const { orderId } = event.data.object.metadata
+    if (event.type != "checkout.session.completed") {
+        await orderModel.updateOne({ _id: orderId }, { status: "rejected" })
+        return res.status(400).json({ message: "Rejected Order" })
+    }
+
+    // decrease product from stock
+    for (const product of req.body.products) {
+        await productModel.updateOne({ _id: product.productId }, { $inc: { stock: -product.quantity, sold: product.quantity } })
+    }
+
+    // clear cart items
+
+    await cartModel.updateOne({ userId: req.user._id }, { products: [] })
+
+    await orderModel.updateOne({ _id: orderId }, { status: "paid" })
+
+    // Return a 200 res to acknowledge receipt of the event
+    return res.status(200).json({ message: "Done" })
+};
