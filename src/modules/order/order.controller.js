@@ -98,13 +98,14 @@ export const getAll = async (req, res, next) => {
 
 
 export const webhook = async (req, res) => {
-    const stripe = Stripe(process.env.STRIP_KEY)
+    // const stripe = Stripe(process.env.STRIP_KEY)
+    const stripe = Stripe("sk_test_51N9oE8E8FB2eaC6mX97vBXjMmt8nmtY4fSIbXPbGK2SQeNghBKu9d1CxlHMRqK03b0ztglPEflKDFQe2k6bpDgj600I2oe9mw1")
     const sig = req.headers['stripe-signature'];
 
     let event;
 
     try {
-        event = stripe.webhooks.constructEvent(req.body, sig, process.env.endpointSecret);
+        event = stripe.webhooks.constructEvent(req.body, sig, "whsec_J30WiF9SzK6CkIqZ6wP8CkTMTYkESxEO");
     } catch (err) {
         res.status(400).send(`Webhook Error: ${err.message}`);
         return;
