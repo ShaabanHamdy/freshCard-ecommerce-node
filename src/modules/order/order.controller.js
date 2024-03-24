@@ -57,8 +57,8 @@ export const createOrder = async (req, res, next) => {
 
     // await cartModel.updateOne({ userId: req.user._id }, { products: [] })
     // payment
-    // const stripe = new Stripe(process.env.STRIP_KEY)
-    const stripe = new Stripe("sk_test_51N9oE8E8FB2eaC6mX97vBXjMmt8nmtY4fSIbXPbGK2SQeNghBKu9d1CxlHMRqK03b0ztglPEflKDFQe2k6bpDgj600I2oe9mw1")
+    const stripe = new Stripe(process.env.STRIP_KEY)
+    // const stripe = new Stripe("sk_test_51N9oE8E8FB2eaC6mX97vBXjMmt8nmtY4fSIbXPbGK2SQeNghBKu9d1CxlHMRqK03b0ztglPEflKDFQe2k6bpDgj600I2oe9mw1")
     const session = await payment({
         stripe,
         payment_method_types: ["card"],
