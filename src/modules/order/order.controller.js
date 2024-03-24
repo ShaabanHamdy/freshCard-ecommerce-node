@@ -5,7 +5,7 @@ import payment from "../../utils/payment.js"
 import { Stripe } from 'stripe';
 
 export const createOrder = async (req, res, next) => {
-    const { note, address, phone } = req.body
+    const { note, address, phone,paymentType } = req.body
 
 
     const cart = await cartModel.findOne({ userId: req.user._id })
@@ -117,13 +117,15 @@ export const webhook = async (req, res) => {
     }
 
     // decrease product from stock
+    const cart = await cartModel.findOne({ userId: req.user._id })
+    req.body.products = cart.products
+    
     for (const product of req.body.products) {
         await productModel.updateOne({ _id: product.productId }, { $inc: { stock: -product.quantity, sold: product.quantity } })
     }
-
+    
     // clear cart items
-
-    await cartModel.updateOne({ userId: req.user._id }, { products: [] })
+   await cartModel.updateOne({ userId: req.user._id }, { products: [] })
 
     await orderModel.updateOne({ _id: orderId }, { status: "paid" })
 
