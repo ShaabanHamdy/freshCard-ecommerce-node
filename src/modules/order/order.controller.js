@@ -65,9 +65,9 @@ export const createOrder = async (req, res, next) => {
         mode: "payment",
         customer_email: req.user.email,
         metadata: {
-            order_Id: order._id.toString()
+            orderIde: order._id.toString()
         },
-        cancel_url: `${process.env.CANCEL_URL}?orderId=${order._id.toString()}`,
+        cancel_url: `${process.env.CANCEL_URL}?orderIds=${order._id.toString()}`,
         line_items: order.products.map(product => {
             return {
                 price_data: {
