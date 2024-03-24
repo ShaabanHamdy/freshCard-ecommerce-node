@@ -5,7 +5,7 @@ import payment from "../../utils/payment.js"
 import { Stripe } from 'stripe';
 
 export const createOrder = async (req, res, next) => {
-    const { note, address, phone,paymentType } = req.body
+    const { note, address, phone, paymentType } = req.body
 
 
     const cart = await cartModel.findOne({ userId: req.user._id })
@@ -110,17 +110,16 @@ export const webhook = async (req, res) => {
         res.status(400).send(`Webhook Error: ${err.message}`);
         return;
     }
+    let order = await orderModel.find()
 
     // Handle the event
-    const { orderId } = event.data.object.metadata
     if (event.type != "checkout.session.completed") {
-        await orderModel.updateOne({ _id: orderId }, { status: "rejected" })
+        await orderModel.updateOne({ _id: order._id }, { status: "rejected" })
         return res.status(400).json({ message: "Rejected Order" })
     }
-    const id = orderId
-    await orderModel.updateOne({ _id: orderId }, { status: "paid" })
-    
+    await orderModel.updateOne({ _id: order._id }, { status: "paid" })
+
     // Return a 200 res to acknowledge receipt of the event
-    return res.status(200).json({ message: "Done",id })
+    return res.status(200).json({ message: "Done", id: order._id })
 };
 
