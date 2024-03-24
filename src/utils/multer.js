@@ -1,9 +1,9 @@
-import multer, { memoryStorage } from "multer";
+import multer from "multer";
 import SharpMulter from "sharp-multer";
-import path from "path";
-import { fileURLToPath } from "url";
-import fs from 'fs'
 import { nanoid } from "nanoid";
+// import path from "path";
+// import { fileURLToPath } from "url";
+// import fs from 'fs'
 
 
 
@@ -13,9 +13,8 @@ const validationObject = {
     files: ['application/pdf']
 }
 export const myMulter = () => {
-    const __dirName = path.dirname(fileURLToPath(import.meta.url))
-    const fullPath = path.join(__dirName, `../uploads/images`)
-    // console.log(fullPath);
+    // const __dirName = path.dirname(fileURLToPath(import.meta.url))
+    // const fullPath = path.join(__dirName, `../uploads/images`)
     // if (fs.existsSync(fullPath)) {
     //     fs.mkdirSync(fullPath, { recursive: true })
     // }
@@ -42,9 +41,9 @@ export const myMulter = () => {
     
     //==============================================================================
     const upload = multer({ fileFilter, storage })
-    // const upload = multer({ fileFilter })
     return upload
 }
+
 
 
 

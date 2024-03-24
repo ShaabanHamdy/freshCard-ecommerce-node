@@ -5,85 +5,87 @@ import payment from "../../utils/payment.js"
 import { Stripe } from 'stripe';
 
 export const createOrder = async (req, res, next) => {
-    const { note, address, phone, paymentType } = req.body
-    const cart = await cartModel.findOne({ userId: req.user._id })
-    if (!cart?.products?.length) {
-        return next(new Error(`Empty cart`))
-    }
-    req.body.products = cart.products
+    const { note, address, phone } = req.body
+    console.log(note,address,phone);
 
-    let finalProductList = []
-    let productIds = []
-    let subtotal = 0
+    
+    // const cart = await cartModel.findOne({ userId: req.user._id })
+    // if (!cart?.products?.length) {
+    //     return next(new Error(`Empty cart`))
+    // }
+    // req.body.products = cart.products
 
-    for (let product of req.body.products) {
-        const checkedProduct = await productModel.findOne({
-            _id: product.productId,
-            stock: { $gte: product.quantity },
-        })
+    // let finalProductList = []
+    // let productIds = []
+    // let subtotal = 0
 
-        if (!checkedProduct) {
-            return next(new Error(`Invalid product ${checkedProduct.productId}`))
-        }
+    // for (let product of req.body.products) {
+    //     const checkedProduct = await productModel.findOne({
+    //         _id: product.productId,
+    //         stock: { $gte: product.quantity },
+    //     })
 
-        product = product.toObject()
+    //     if (!checkedProduct) {
+    //         return next(new Error(`Invalid product ${checkedProduct.productId}`))
+    //     }
 
-        productIds.push(product.productId)
-        product.title = checkedProduct.title
-        product.price = checkedProduct.price
-        product.finalPrice = product.quantity * checkedProduct.price
-        finalProductList.push(product)
-        subtotal += product.finalPrice
-    }
+    //     product = product.toObject()
+    //     productIds.push(product.productId)
+    //     product.title = checkedProduct.title
+    //     product.price = checkedProduct.price
+    //     product.finalPrice = product.quantity * checkedProduct.price
+    //     finalProductList.push(product)
+    //     subtotal += product.finalPrice
+    // }
 
-    const order = await orderModel.create({
-        userId: req.user._id,
-        address,
-        phone,
-        note,
-        products: finalProductList,
-        subtotal,
-        paymentType,
-        status: "waitPayment" 
-    })
+    // const order = await orderModel.create({
+    //     userId: req.user._id,
+    //     address,
+    //     phone,
+    //     note,
+    //     products: finalProductList,
+    //     subtotal,
+    //     paymentType,
+    //     status: "waitPayment" 
+    // })
 
     // decrease product from stock
-    for (const product of req.body.products) {
-        await productModel.updateOne({ _id: product.productId }, { $inc: { stock: -product.quantity, sold: product.quantity } })
-    }
+    // for (const product of req.body.products) {
+    //     await productModel.updateOne({ _id: product.productId }, { $inc: { stock: -product.quantity, sold: product.quantity } })
+    // }
 
     // clear cart items
 
-    await cartModel.updateOne({ userId: req.user._id }, { products: [] })
+    // await cartModel.updateOne({ userId: req.user._id }, { products: [] })
     // payment 
-    const stripe = new Stripe(process.env.STRIP_KEY)
-    const session = await payment({
-        stripe,
-        payment_method_types: ["card"],
-        mode: "payment",
-        customer_email: req.user.email,
-        metadata: {
-            orderId: order._id.toString()
-        },
-        cancel_url: `${process.env.CANCEL_URL}?orderId=${order._id.toString()}`,
-        line_items: order.products.map(product => {
-            return {
-                price_data: {
-                    currency: "egp",
-                    product_data: {
-                        name: product.title
-                    },
-                    unit_amount: product.price * 100
-                },
-                quantity: product.quantity 
-            }
-        })
+    // const stripe = new Stripe(process.env.STRIP_KEY)
+    // const session = await payment({
+    //     stripe,
+    //     payment_method_types: ["card"],
+    //     mode: "payment",
+    //     customer_email: req.user.email,
+    //     metadata: {
+    //         orderId: order._id.toString()
+    //     },
+    //     cancel_url: `${process.env.CANCEL_URL}?orderId=${order._id.toString()}`,
+    //     line_items: order.products.map(product => {
+    //         return {
+    //             price_data: {
+    //                 currency: "egp",
+    //                 product_data: {
+    //                     name: product.title
+    //                 },
+    //                 unit_amount: product.price * 100
+    //             },
+    //             quantity: product.quantity 
+    //         }
+    //     })
 
-    })
+    // })
 
 
-    return res.status(201).json({ message: "Done", order, session, url: session.url })
-    // return res.status(201).json({ message: "Done", order})
+    // return res.status(201).json({ message: "Done", order, session, url: session.url })
+    return res.status(201).json({ message: "Done"})
 
 
 }

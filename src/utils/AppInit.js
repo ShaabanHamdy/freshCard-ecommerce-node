@@ -1,10 +1,10 @@
 import * as appRouters from "../modules/app.routes.js"
 import cors from 'cors'
-import path from "path";
-import { fileURLToPath } from "url";
 import Connection_db from '../../db/connection_db.js';
 import globalErrorHandling from "./error_handling.js";
-const __dirName = path.dirname(fileURLToPath(import.meta.url))
+// import { fileURLToPath } from "url";
+// import path from "path";
+// const __dirName = path.dirname(fileURLToPath(import.meta.url))
 
 
 
