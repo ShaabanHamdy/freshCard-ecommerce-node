@@ -116,7 +116,8 @@ export const webhook = async (req, res) => {
         await orderModel.updateOne({ _id: orderId }, { status: "rejected" })
         return res.status(400).json({ message: "Rejected Order" })
     }
-
+    
+    await orderModel.updateOne({ _id: orderId }, { status: "paid" })
     // Return a 200 res to acknowledge receipt of the event
     return res.status(200).json({ message: "Done" })
 };

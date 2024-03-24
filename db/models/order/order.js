@@ -23,8 +23,8 @@ const orderSchema = new Schema({
     },
     status: {
         type: String,
-        default: "placed",
-        enum: ["waitPayment", "placed", "canceled", "rejected", "onWay", "delivered"],
+        default: "waitPayment",
+        enum: ["waitPayment", "placed", "canceled", "rejected", "onWay", "delivered" , "paid"],
     },
 }, {
 
