@@ -15,7 +15,7 @@ router.get("/getAll", asyncHandling(orderConnection.getAll))
 
 
 
-router.post('/webhook',auth(), express.raw({ type: 'application/json' }),
+router.post('/webhook',express.raw({ type: 'application/json' }),
     asyncHandling(orderConnection.webhook)
 )
 

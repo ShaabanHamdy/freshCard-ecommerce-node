@@ -48,14 +48,14 @@ export const createOrder = async (req, res, next) => {
         status: "waitPayment"
     })
 
-    // // decrease product from stock
-    // for (const product of req.body.products) {
-    //     await productModel.updateOne({ _id: product.productId }, { $inc: { stock: -product.quantity, sold: product.quantity } })
-    // }
+    // decrease product from stock
+    for (const product of req.body.products) {
+        await productModel.updateOne({ _id: product.productId }, { $inc: { stock: -product.quantity, sold: product.quantity } })
+    }
 
-    // // clear cart items
+    // clear cart items
 
-    // await cartModel.updateOne({ userId: req.user._id }, { products: [] })
+    await cartModel.updateOne({ userId: req.user._id }, { products: [] })
     // payment
     // const stripe = new Stripe(process.env.STRIP_KEY)
     const stripe = new Stripe("sk_test_51N9oE8E8FB2eaC6mX97vBXjMmt8nmtY4fSIbXPbGK2SQeNghBKu9d1CxlHMRqK03b0ztglPEflKDFQe2k6bpDgj600I2oe9mw1")
@@ -116,19 +116,6 @@ export const webhook = async (req, res) => {
         await orderModel.updateOne({ _id: orderId }, { status: "rejected" })
         return res.status(400).json({ message: "Rejected Order" })
     }
-
-    // decrease product from stock
-    const cart = await cartModel.findOne({ userId: req.user._id })
-    req.body.products = cart.products
-    
-    for (const product of req.body.products) {
-        await productModel.updateOne({ _id: product.productId }, { $inc: { stock: -product.quantity, sold: product.quantity } })
-    }
-    
-    // clear cart items
-   await cartModel.updateOne({ userId: req.user._id }, { products: [] })
-
-    await orderModel.updateOne({ _id: orderId }, { status: "paid" })
 
     // Return a 200 res to acknowledge receipt of the event
     return res.status(200).json({ message: "Done" })
