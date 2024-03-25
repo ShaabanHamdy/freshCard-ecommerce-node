@@ -65,7 +65,7 @@ export const createOrder = async (req, res, next) => {
         mode: "payment",
         customer_email: req.user.email,
         metadata: {
-            orderIde: order._id.toString()
+            orderId: order._id.toString()
         },
         cancel_url: `http://localhost:3000/Cart?orderIds=${order._id.toString()}`,
         line_items: order.products.map(product => {
@@ -110,16 +110,17 @@ export const webhook = async (req, res) => {
         res.status(400).send(`Webhook Error: ${err.message}`);
         return;
     }
-    let order = await orderModel.find()
 
     // Handle the event
+    const {orderId}=event.data.object.metadata 
+
     if (event.type != "checkout.session.completed") {
-        await orderModel.updateOne({ _id: order._id }, { status: "rejected" })
+        await orderModel.updateOne({ _id: orderId }, { status: "rejected" })
         return res.status(400).json({ message: "Rejected Order" })
     }
-    await orderModel.updateOne({ _id: order._id }, { status: "paid" })
+    await orderModel.updateOne({ _id: orderId }, { status: "paid" })
 
     // Return a 200 res to acknowledge receipt of the event
-    return res.status(200).json({ message: "Done", id: order._id })
+    return res.status(200).json({ message: "Done" })
 };
 
