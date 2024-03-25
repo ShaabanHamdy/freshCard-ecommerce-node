@@ -121,11 +121,10 @@ export const webhook = async (req, res) => {
     await orderModel.updateOne({ _id: orderId }, { status: "paid" })
     //=================================================================
 
-    const cart = await cartModel.find()
-    req.body.products = cart.products
+    const carts = await cartModel.find()
 
 
-    for (const product of req.body.products) {
+    for (const product of carts.products) {
         await productModel.updateOne({ _id: product.productId },
             { $inc: { stock: -product.quantity, sold: product.quantity } })
     }
