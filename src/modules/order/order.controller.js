@@ -6,8 +6,6 @@ import { Stripe } from 'stripe';
 
 export const createOrder = async (req, res, next) => {
     const { note, address, phone, paymentType } = req.body
-
-
     const cart = await cartModel.findOne({ userId: req.user._id })
     if (!cart?.products?.length) {
         return next(new Error(`Empty cart`))
@@ -23,6 +21,7 @@ export const createOrder = async (req, res, next) => {
             _id: product.productId,
             stock: { $gte: product.quantity },
         })
+
 
         if (!checkedProduct) {
             return next(new Error(`Invalid product ${checkedProduct.productId}`))
