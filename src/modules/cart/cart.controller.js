@@ -134,9 +134,14 @@ export const getAllCarts = async (req, res, next) => {
     let num = data.map(res => res.products.length)
     let carts = data.map(e => e.products)
     const calcQuantity = parseInt(data.map((e)=> e.products.reduce((e,x)=> e + x.quantity , 0)))
-    // res.json({ message: "Done", data: carts })
     res.json({ message: "Done", results: parseInt(num), data: carts ,calcQuantity })
-
 
 }
 // =========================================================
+export const logFunction = (req,res,next)=>{
+
+    setTimeout(() => {
+        console.log("on render function")
+    }, 500);
+    res.json({message:"on render function"})
+}

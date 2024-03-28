@@ -8,17 +8,21 @@ const router = Router()
 
 
 
+
 // ========================================================================
 router.post("/addProductToCart", auth(),
     asyncHandling(cartConnection.addProductToCart))
 
 
 
+// ========================================================================
 router.get("/getAllCarts", auth(),
     asyncHandling(cartConnection.getAllCarts))
+
 // ========================================================================
 
-
+router.get("/logFunction",
+    cartConnection.logFunction)
 
 
 // ========================================================================
