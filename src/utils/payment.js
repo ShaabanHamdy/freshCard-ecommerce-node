@@ -8,8 +8,8 @@ async function payment({
     mode="payment",
     customer_email,
     metadata={},
-    cancel_url="http://localhost:3000/Cart",
-    success_url="http://localhost:3000",
+    cancel_url="https://shaaban-hamdy-fresh-cart.netlify.app/#/",
+    success_url="https://shaaban-hamdy-fresh-cart.netlify.app/#/",
     discounts=[],
     line_items=[]
 }={}) {
