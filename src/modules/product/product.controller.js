@@ -66,10 +66,11 @@ export const getAllProducts = async (req, res, next) => {
 }
 // ==================================================================
 export const getAllProductsUsers = async (req, res, next) => {
-    const {limit,skip} = paginate(req.query.page , req.query.size)
+    // const {limit,skip} = paginate(req.query.page , req.query.size)
     const data = await productModel.find().populate([{
         path: "categoryId"
-    }]).limit(limit).skip(skip)
+    }])
+    // .limit(limit).skip(skip)
     
     if (data.length == 0) {
         next(new Error("no products available"))
